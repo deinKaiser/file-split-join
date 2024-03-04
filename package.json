@@ -4,6 +4,7 @@
   "description": "Package for splitting files into parts and merging them back",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/deinKaiser/file-split-join.git"
