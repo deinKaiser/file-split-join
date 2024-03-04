@@ -32,4 +32,9 @@ test("split and merge file", async () => {
   // Merge the file
   const mergedFile = await mergeFilesIntoOne(splitFiles, mergedFilePath);
   expect(mergedFile).toBe(mergedFilePath);
+
+  // Verify the merged file content matches the original
+  const originalContent = fs.readFileSync(testFilePath, { encoding: 'utf8' });
+  const mergedContent = fs.readFileSync(mergedFilePath, { encoding: 'utf8' });
+  expect(originalContent).toBe(mergedContent);
 },10000);

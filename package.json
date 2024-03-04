@@ -6,8 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest __tests__/tests.ts",
-    "build": "tsc",
-    "dev:test": "npm run build && node index.js"
+    "build": "tsc"
   },
   "author": "Vadym Yarema",
   "license": "MIT",
