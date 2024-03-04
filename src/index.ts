@@ -4,5 +4,7 @@
  * MIT Licensed
  */
 
-export * from "./split";
-export * from "./join";
+import { splitFileByBytes, splitFileIntoParts } from "./split";
+import { mergeFilesIntoOne } from "./join";
+
+export default { splitFileByBytes, splitFileIntoParts, mergeFilesIntoOne };
