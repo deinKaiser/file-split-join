@@ -4,6 +4,16 @@
   "description": "Package for splitting files into parts and merging them back",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deinKaiser/file-split-join.git"
+  },
+  "keywords": [
+    "file",
+    "split",
+    "join",
+    "stream"
+  ],
   "scripts": {
     "test": "jest __tests__/tests.ts",
     "build": "tsc"
