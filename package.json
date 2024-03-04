@@ -1,0 +1,25 @@
+{
+  "name": "file-split-join",
+  "version": "1.0.0",
+  "description": "Package for splitting files into parts and merging them back",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "jest __tests__/tests.ts",
+    "build": "tsc",
+    "dev:test": "npm run build && node index.js"
+  },
+  "author": "Vadym Yarema",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  }
+}
