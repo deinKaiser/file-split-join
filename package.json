@@ -1,6 +1,6 @@
 {
   "name": "file-split-join",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Package for splitting files into parts and merging them back",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
