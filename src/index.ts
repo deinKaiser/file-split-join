@@ -50,51 +50,66 @@ export async function splitFileByBytes(
   chunkSizeInBytes: number,
   destination: string
 ): Promise<string[]> {
-  return new Promise(async (resolve, reject) => {
-    const stats = await fs.promises.stat(filePath);
+  const stats = await fs.promises.stat(filePath);
 
-    if (!stats.isFile()) {
-      throw new Error("File does not exist");
-    }
+  if (!stats.isFile()) {
+    throw new Error("File does not exist");
+  }
 
-    if (stats.size === 0) {
-      throw new Error("File is empty");
-    }
+  if (stats.size === 0) {
+    throw new Error("File is empty");
+  }
 
-    let fileCounter = 0;
-    const fileNames: string[] = [];
+  let fileCounter = 0;
+  let currentChunkSize = 0;
+  const fileNames: string[] = [];
+  let currentWriteStream = fs.createWriteStream(
+    `${destination}_${fileCounter}`
+  );
+  fileNames.push(`${destination}_${fileCounter}`);
 
-    const stream = fs.createReadStream(filePath);
-    let data: Buffer = Buffer.alloc(0);
+  return new Promise((resolve, reject) => {
+    const stream = fs.createReadStream(filePath, {
+      highWaterMark: 1024 * 1024,
+    });
 
     stream.on("data", (chunk: Buffer) => {
-      data = Buffer.concat([data, chunk]);
+      let remainingChunk = chunk;
+      while (remainingChunk.length > 0) {
+        const remainingSpaceInCurrentChunk =
+          chunkSizeInBytes - currentChunkSize;
+        const lengthToWrite = Math.min(
+          remainingChunk.length,
+          remainingSpaceInCurrentChunk
+        );
+        currentWriteStream.write(remainingChunk.slice(0, lengthToWrite));
 
-      while (data.length >= chunkSizeInBytes) {
-        const fileData = data.subarray(0, chunkSizeInBytes);
-        const fileName = `${destination}_${fileCounter}`;
+        remainingChunk = remainingChunk.slice(lengthToWrite);
+        currentChunkSize += lengthToWrite;
 
-        createFileWithData(fileName, fileData);
-        fileNames.push(fileName);
-        data = data.subarray(chunkSizeInBytes);
-        fileCounter++;
+        if (currentChunkSize === chunkSizeInBytes) {
+          currentWriteStream.end();
+          fileCounter++;
+          currentChunkSize = 0;
+          if (remainingChunk.length > 0) {
+            currentWriteStream = fs.createWriteStream(
+              `${destination}_${fileCounter}`
+            );
+            fileNames.push(`${destination}_${fileCounter}`);
+          }
+        }
       }
     });
 
     stream.on("end", () => {
-      if (data.length > 0) {
-        const fileName = `${destination}_${fileCounter}`;
-        createFileWithData(fileName, data);
-        fileNames.push(fileName);
-      }
+      currentWriteStream.end();
       resolve(fileNames);
     });
 
     stream.on("error", (error) => {
+      currentWriteStream.end();
       reject(error);
     });
-
-    return fileNames;
   });
 }
 
