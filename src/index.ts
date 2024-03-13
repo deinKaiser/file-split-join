@@ -113,21 +113,6 @@ export async function splitFileByBytes(
   });
 }
 
-async function createFileWithData(
-  fileName: string,
-  data: Buffer
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(fileName, data, (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
-
 /**
  * Merges multiple files into one.
  *
